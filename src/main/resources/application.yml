@@ -1,1 +1,13 @@
+server:
+  shutdown: graceful
 
+spring:
+  application:
+    name: blog-search-application
+
+kakao:
+  api:
+    url:
+      https://dapi.kakao.com
+    key:
+      9f39af5200cc763ed4880c2b52b73645
