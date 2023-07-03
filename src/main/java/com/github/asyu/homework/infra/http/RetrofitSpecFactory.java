@@ -1,4 +1,4 @@
-package com.github.asyu.homework.infra.client;
+package com.github.asyu.homework.infra.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.concurrent.TimeUnit;

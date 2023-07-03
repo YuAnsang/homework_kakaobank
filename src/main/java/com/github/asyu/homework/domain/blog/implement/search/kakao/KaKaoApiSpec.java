@@ -1,7 +1,6 @@
 package com.github.asyu.homework.domain.blog.implement.search.kakao;
 
-import com.github.asyu.homework.domain.blog.implement.search.kakao.KakaoBlogResponse;
-import com.github.asyu.homework.infra.client.IRetrofitSpec;
+import com.github.asyu.homework.infra.http.IRetrofitSpec;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
