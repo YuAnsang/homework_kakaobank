@@ -1,4 +1,4 @@
-package com.github.asyu.homework.domain.blog.mapper;
+package com.github.asyu.homework.domain.blog.implement.maper;
 
 import com.github.asyu.homework.domain.blog.dto.response.BlogResponse.Item;
 import com.github.asyu.homework.domain.blog.implement.search.kakao.KakaoBlogResponse.Document;

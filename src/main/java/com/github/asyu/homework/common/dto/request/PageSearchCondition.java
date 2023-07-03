@@ -1,5 +1,10 @@
 package com.github.asyu.homework.common.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageSearchCondition {
 
   private static final int DEFAULT_PAGE = 1;
