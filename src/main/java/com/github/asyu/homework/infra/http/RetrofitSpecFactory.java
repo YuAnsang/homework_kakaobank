@@ -1,6 +1,5 @@
 package com.github.asyu.homework.infra.http;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,33 +13,6 @@ public class RetrofitSpecFactory {
             .baseUrl(baseUrl)
             .client(getDefaultClient())
             .addConverterFactory(JacksonConverterFactory.create())
-            .build();
-        return retrofit.create(clientClass);
-    }
-
-    public static <T extends IRetrofitSpec> T createRequestClient(String baseUrl, ObjectMapper objectMapper, Class<T> clientClass) {
-        Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(getDefaultClient())
-            .addConverterFactory(JacksonConverterFactory.create(objectMapper))
-            .build();
-        return retrofit.create(clientClass);
-    }
-
-    public static <T extends IRetrofitSpec> T createRequestClient(String baseUrl, Class<T> clientClass, OkHttpClient client) {
-        Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(client)
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build();
-        return retrofit.create(clientClass);
-    }
-
-    public static <T extends IRetrofitSpec> T createRequestClient(String baseUrl, ObjectMapper objectMapper, Class<T> clientClass, OkHttpClient client) {
-        Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(client)
-            .addConverterFactory(JacksonConverterFactory.create(objectMapper))
             .build();
         return retrofit.create(clientClass);
     }

@@ -13,32 +13,32 @@ class LayeredDependencyRulesTest {
   @ArchTest
   static final ArchRule controller_should_not_depend_on_entity =
       noClasses().that()
-          .resideInAPackage("com.github.asyu.homework.domain..controller..")
+          .resideInAPackage("..domain..controller..")
           .should()
           .dependOnClassesThat()
-          .resideInAPackage("com.github.asyu.homework.domain..persistence..entity..");
+          .resideInAPackage("..domain..persistence..entity..");
 
   @ArchTest
   static final ArchRule common_should_not_access_domain =
       noClasses().that()
-          .resideInAPackage("com.github.asyu.homework.common..")
+          .resideInAPackage("..common..")
           .should()
           .accessClassesThat()
-          .resideInAPackage("com.github.asyu.homework.domain..");
+          .resideInAPackage("..domain..");
 
   @ArchTest
   static final ArchRule common_should_not_access_infra =
       noClasses().that()
-          .resideInAPackage("com.github.asyu.homework.common..")
+          .resideInAPackage("..common..")
           .should()
           .accessClassesThat()
-          .resideInAPackage("com.github.asyu.homework.infra..");
+          .resideInAPackage("..infra..");
 
   @ArchTest
   static final ArchRule infra_should_not_access_common =
       noClasses().that()
-          .resideInAPackage("com.github.asyu.homework.infra..")
+          .resideInAPackage("..infra..")
           .should()
           .accessClassesThat()
-          .resideInAPackage("com.github.asyu.homework.common..");
+          .resideInAPackage("..common..");
 }

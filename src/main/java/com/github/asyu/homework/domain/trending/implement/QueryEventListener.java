@@ -1,7 +1,8 @@
 package com.github.asyu.homework.domain.trending.implement;
 
-import com.github.asyu.homework.common.event.QueryEvent;
 import com.github.asyu.homework.common.aop.DistributedLock;
+import com.github.asyu.homework.common.event.QueryEvent;
+import com.github.asyu.homework.common.exception.EntityNotExistsException;
 import com.github.asyu.homework.domain.trending.persistence.dao.TrendingDao;
 import com.github.asyu.homework.domain.trending.persistence.entity.Trending;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,15 @@ public class QueryEventListener {
   @DistributedLock(key = "#event.query()")
   @EventListener
   public void subscribeQueryEvent(QueryEvent event) {
-    Trending trending = trendingDao.findByQuery(event.query());
+    String query = event.query();
+    try {
+      Trending trending = trendingDao.findByQuery(query);
       log.info("trending id : {}, query : {}, count : {}", trending.getId(), trending.getQuery(), trending.getQueryCount());
-    trending.increaseQueryCount();
-    trendingDao.save(trending);
+      trending.increaseQueryCount();
+    } catch (EntityNotExistsException e) {
+      Trending trending = new Trending(query, 1);
+      trendingDao.save(trending);
+    }
   }
 
 }
