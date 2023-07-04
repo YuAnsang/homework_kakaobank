@@ -2,10 +2,11 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.1'
     id 'io.spring.dependency-management' version '1.1.0'
+    id 'maven-publish'
 }
 
 group = 'com.github.asyu'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 java {
     sourceCompatibility = '17'
@@ -51,4 +52,23 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            url 'https://maven.pkg.github.com/YuAnsang/20230705_2126-000131'
+            name = 'homework-packages'
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USER_NAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("ACCESS_TOKEN")
+            }
+        }
+    }
+
+    publications {
+        bootJava(MavenPublication) {
+            artifact bootJar
+        }
+    }
 }
