@@ -81,8 +81,6 @@ class QueryEventListenerTest {
         while (latch.getCount() != 0) {
           try {
             eventPublisher.publish(query);
-          } catch (Exception e) {
-            throw new RuntimeException("Must not occurred!!!", e);
           } finally {
             latch.countDown();
           }

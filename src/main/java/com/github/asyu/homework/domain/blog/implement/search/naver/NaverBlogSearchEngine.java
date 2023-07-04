@@ -1,4 +1,4 @@
-package com.github.asyu.homework.domain.blog.implement.search.kakao;
+package com.github.asyu.homework.domain.blog.implement.search.naver;
 
 import com.github.asyu.homework.common.dto.response.PageItem;
 import com.github.asyu.homework.common.exception.CommunicationFailureException;
@@ -17,18 +17,21 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 @Slf4j
-@Order(1)
+@Order(2)
 @Component
-public class KakaoBlogSearchEngine implements IBlogSearchEngine {
+public class NaverBlogSearchEngine implements IBlogSearchEngine {
 
-  private final String apiKey;
+  private final String clientId;
 
-  private final KakaoApiSpec apiSpec;
+  private final String secret;
 
-  public KakaoBlogSearchEngine(@Value("${kakao.api.url}") String baseUrl,
-      @Value("${kakao.api.key}") String apiKey) {
-    this.apiSpec = RetrofitSpecFactory.createRequestClient(baseUrl, KakaoApiSpec.class);
-    this.apiKey = "KakaoAK " + apiKey;
+  private final NaverApiSpec apiSpec;
+
+  public NaverBlogSearchEngine(@Value("${naver.api.url}") String baseUrl,
+      @Value("${naver.api.client-id}") String clientId, @Value("${naver.api.secret}") String secret) {
+    this.apiSpec = RetrofitSpecFactory.createRequestClient(baseUrl, NaverApiSpec.class);
+    this.clientId = clientId;
+    this.secret = secret;
   }
 
   @Override
@@ -36,26 +39,26 @@ public class KakaoBlogSearchEngine implements IBlogSearchEngine {
     try {
       int page = condition.getPage();
       int size = condition.getSize();
-      Call<KakaoBlogResponse> call = apiSpec.searchBlog(
-          apiKey,
+      Call<NaverBlogResponse> call = apiSpec.searchBlog(
+          clientId, secret,
           condition.getQuery(),
-          condition.getSort().getKakaoCode(),
+          condition.getSort().getNaverCode(),
           page,
           size
       );
 
-      Response<KakaoBlogResponse> response = call.execute();
+      Response<NaverBlogResponse> response = call.execute();
       if (!response.isSuccessful()) {
         String errorBody = response.errorBody() == null ? "" : response.errorBody().string();
-        throw new CommunicationFailureException("Kakao Response Failure. Error Response : " + errorBody);
+        throw new CommunicationFailureException("Naver Response Failure. Error Response : " + errorBody);
       }
 
-      KakaoBlogResponse body = response.body();
+      NaverBlogResponse body = response.body();
 
       assert body != null;
-      return new BlogResponse(BlogType.KAKAO, BlogMapper.INSTANCE.toItems(body.documents()), new PageItem(page, size, body.meta().totalCount()));
+      return new BlogResponse(BlogType.NAVER, BlogMapper.INSTANCE.toItemsForNaver(body.items()), new PageItem(page, size, body.total()));
     } catch (IOException e) {
-      throw new CommunicationFailureException("Kakao communication failure", e);
+      throw new CommunicationFailureException("Naver communication failure", e);
     }
   }
 

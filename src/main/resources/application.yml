@@ -5,7 +5,7 @@ spring:
   application:
     name: blog-search-application
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
     password: password
@@ -31,3 +31,9 @@ kakao:
   api:
     url: https://dapi.kakao.com
     key: 9f39af5200cc763ed4880c2b52b73645
+
+naver:
+  api:
+    url: https://openapi.naver.com
+    client-id: dzwU0GtRwpmQV71Om1m4
+    secret: c9_u4IAR1q

@@ -6,8 +6,8 @@ public class CommunicationFailureException extends BusinessException {
     super(message);
   }
 
-  public CommunicationFailureException(Throwable cause) {
-    super(cause);
+  public CommunicationFailureException(String message, Throwable cause) {
+    super(message, cause);
   }
 
 }

@@ -21,5 +21,17 @@ public enum SortOption {
     }
   }
 
-
+  public String getNaverCode() {
+    switch (this) {
+      case ACCURACY -> {
+        return "sim";
+      }
+      case NEWEST -> {
+        return "date";
+      }
+      default -> {
+        return null;
+      }
+    }
+  }
 }
