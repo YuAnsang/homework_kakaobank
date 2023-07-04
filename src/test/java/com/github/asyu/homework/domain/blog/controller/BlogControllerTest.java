@@ -2,6 +2,7 @@ package com.github.asyu.homework.domain.blog.controller;
 
 import static com.github.asyu.homework.common.SpringProfiles.TEST;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -10,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.github.asyu.homework.common.enums.ErrorCode;
 import com.github.asyu.homework.domain.blog.dto.request.BlogSearchCondition;
 import com.github.asyu.homework.domain.blog.enums.SortOption;
+import com.github.asyu.homework.domain.blog.implement.event.QueryEventPublisher;
 import com.github.asyu.homework.domain.blog.implement.search.kakao.KaKaoApiSpec;
 import com.github.asyu.homework.domain.blog.implement.search.kakao.KakaoBlogResponse;
 import com.github.asyu.homework.domain.blog.implement.search.kakao.KakaoBlogResponse.Document;
@@ -30,6 +32,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,8 +40,8 @@ import retrofit2.Call;
 import retrofit2.mock.Calls;
 
 @ActiveProfiles(TEST)
-@SpringBootTest
 @AutoConfigureMockMvc
+@SpringBootTest
 class BlogControllerTest {
 
   @Autowired
@@ -49,6 +52,9 @@ class BlogControllerTest {
 
   @Mock
   private KaKaoApiSpec kaKaoApiSpec;
+
+  @MockBean
+  private QueryEventPublisher queryEventPublisher;
 
   @BeforeEach
   public void setup() {
@@ -66,6 +72,7 @@ class BlogControllerTest {
         createDocuments(condition.getSize())
     );
     Call<KakaoBlogResponse> mockCall = Calls.response(response);
+    doNothing().when(queryEventPublisher).publish(condition.getQuery());  // 인기 검색어 저장은 다른 관심사이기 때문에 별도로 테스트한다.
     when(kaKaoApiSpec.searchBlog(any(String.class), any(String.class), any(), any(Integer.class), any(Integer.class))).thenReturn(mockCall);
 
     // When & Then

@@ -4,10 +4,30 @@ server:
 spring:
   application:
     name: blog-search-application
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 
 kakao:
   api:
-    url:
-      https://dapi.kakao.com
-    key:
-      9f39af5200cc763ed4880c2b52b73645
+    url: https://dapi.kakao.com
+    key: 9f39af5200cc763ed4880c2b52b73645
