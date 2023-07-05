@@ -38,6 +38,11 @@ naver:
     client-id: dzwU0GtRwpmQV71Om1m4
     secret: c9_u4IAR1q
 
+springdoc:
+  swagger-ui:
+    path: /api-docs
+    disable-swagger-default-url: true
+
 resilience4j.circuitbreaker:
   configs:
     default:
