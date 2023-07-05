@@ -37,7 +37,6 @@ public class GlobalExceptionHandler {
     return ErrorResponse.of(ErrorCode.INVALID_PARAMETER);
   }
 
-  // TODO 500 던지는거에 대해서 고민필요
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(BusinessException.class)
   public ErrorResponse handleRuntimeException(BusinessException e) {

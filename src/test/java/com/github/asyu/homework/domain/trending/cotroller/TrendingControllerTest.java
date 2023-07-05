@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.github.asyu.homework.domain.trending.persistence.entity.Trending;
+import com.github.asyu.homework.domain.trending.persistence.entity.TrendingLog;
+import com.github.asyu.homework.domain.trending.persistence.repository.TrendingLogRepository;
 import com.github.asyu.homework.domain.trending.persistence.repository.TrendingRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,17 +30,25 @@ class TrendingControllerTest {
   @Autowired
   private TrendingRepository trendingRepository;
 
+  @Autowired
+  private TrendingLogRepository trendingLogRepository;
+
   @BeforeEach
   public void init() {
     for (int i = 1; i <= 20; i++) {
-      Trending trending = new Trending("pre_defined_query" + i, i);
+      String query = "pre_defined_query" + i;
+      Trending trending = new Trending(query, 21 - i);
       trendingRepository.save(trending);
+      for (int j = i; j <= 20; j++) {
+        trendingLogRepository.save(new TrendingLog(query));
+      }
     }
   }
 
   @AfterEach
   public void destroy() {
     trendingRepository.deleteAll();
+    trendingLogRepository.deleteAll();
   }
 
   @DisplayName("TOP10 인기 검색어를 조회한다. -> 성공")
@@ -50,7 +60,7 @@ class TrendingControllerTest {
     mockMvc.perform(get("/apis/v1/trends/top10"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.rank.size()").value(10))
-        .andExpect(jsonPath("$.rank[0].query").value("pre_defined_query" + 20))
+        .andExpect(jsonPath("$.rank[0].query").value("pre_defined_query" + 1))
         .andExpect(jsonPath("$.rank[0].queryCount").value(20))
     ;
   }

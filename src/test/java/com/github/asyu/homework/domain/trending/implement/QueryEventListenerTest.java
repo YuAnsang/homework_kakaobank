@@ -45,6 +45,8 @@ class QueryEventListenerTest {
     assertThat(trending.getId()).isNotNull();
     assertThat(trending.getQuery()).isEqualTo(query);
     assertThat(trending.getQueryCount()).isEqualTo(1);
+    assertThat(trending.getCreatedAt()).isNotNull();
+    assertThat(trending.getModifiedAt()).isNotNull();
   }
 
   @DisplayName("검색된적 있는 검색어에 대해서 저장한다 -> 성공")
@@ -64,6 +66,7 @@ class QueryEventListenerTest {
     assertThat(trending.getId()).isNotNull();
     assertThat(trending.getQuery()).isEqualTo(query);
     assertThat(trending.getQueryCount()).isEqualTo(queryCount + 1);
+    assertThat(trending.getModifiedAt()).isNotEqualTo(trending.getCreatedAt());
   }
 
   @DisplayName("검색된 검색어 저장한다(동시성 이슈를 확인하기 위해서 멀티스레드 환경) -> 성공")
@@ -94,5 +97,6 @@ class QueryEventListenerTest {
     assertThat(trending.getId()).isNotNull();
     assertThat(trending.getQuery()).isEqualTo(query);
     assertThat(trending.getQueryCount()).isEqualTo(numberOfThreads);
+    assertThat(trending.getModifiedAt()).isNotEqualTo(trending.getCreatedAt());
   }
 }

@@ -20,15 +20,18 @@ public class QueryEventListener {
   @DistributedLock(key = "#event.query()")
   @EventListener
   public void subscribeQueryEvent(QueryEvent event) {
-    String query = event.query();
+    Trending trending = getTrending(event.query());
+    trendingDao.save(trending);
+  }
+
+  private Trending getTrending(String query) {
     try {
       Trending trending = trendingDao.findByQuery(query);
       log.info("trending id : {}, query : {}, count : {}", trending.getId(), trending.getQuery(), trending.getQueryCount());
       trending.increaseQueryCount();
+      return trending;
     } catch (EntityNotExistsException e) {
-      Trending trending = new Trending(query, 1);
-      trendingDao.save(trending);
+      return new Trending(query, 1);
     }
   }
-
 }
