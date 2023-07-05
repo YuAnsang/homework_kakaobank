@@ -56,7 +56,6 @@ resilience4j.circuitbreaker:
       eventConsumerBufferSize: 10
       recordExceptions:
         - com.github.asyu.homework.common.exception.CommunicationFailureException
-        - io.github.resilience4j.circuitbreaker.CallNotPermittedException
   instances:
     kakao:
       baseConfig: default
