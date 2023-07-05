@@ -1,14 +1,45 @@
 # 블로그 검색 Project
 
+## Project Description
+- 해당 프로젝트 Open API를 활용한 블로그 검색 프로젝트입니다.
+- 별도 첨부된 요구사항에 맞춰 블로그 검색 프로그램을 작성합니다.
+
 ## 지원자 정보
 - 2126-000131_유안상_서버 개발자
 
 ## 빌드 결과물
-- TBD
+- https://github.com/YuAnsang/20230705_2126-000131/releases/download/0.0.1/homework-0.0.1.jar
 
-## Project Description
-- 해당 프로젝트 Open API를 활용한 블로그 검색 프로젝트입니다.
-- 별도 첨부된 요구사항에 맞춰 블로그 검색 프로그램을 작성합니다.
+## Application Profile
+- test
+  - 테스트 코드가 실행되는 profile입니다.
+  - 테스트 코드에서 의존 구성요소를(e.g. 외부 통신, 다른 서비스 등) 사용할 수 없을 때는 **테스트 더블**을 사용하여 테스트합니다.
+- default
+  - 로컬 환경에서 실행되는 profile입니다.
+  - 의존 구성요소는 docker-compose를 통해 실행합니다.
+  - docker-compose로 해결 할 수 없는 경우 Profile별로 별도 로직을 수행할 수 있도록 합니다.
+- 과제 프로젝트이므로 test, default Profile 외에는 지원하지 않습니다.
+
+## 실행 가이드
+- test
+  - JUnit으로 구성된 테스트 케이스를 실행합니다.
+  - RDB는 In-Memory DB를 사용하고, 서드파티 구동을 위해 testContainers를 사용했습니다.
+  - 아래 명령어를 입력합니다.
+    ```
+    ./gradlew test
+    ```
+- default
+  - 로컬 환경에서 Application을 구동합니다.
+  - 각 서드 파티(Cache 등)은 **Docker에 의존성이 있습니다**.
+  - 링크 걸린 jar 파일을 실행하기전 **반드시 프로젝트 root에 있는 docker-compose.yml 파일로 환경을 구성해야합니다.**
+  ```
+  docker-compose up -d
+  ```
+  - 그 후 아래 명령어로 jar 파일을 실행합니다.
+  ```
+  java -jar homework-0.0.1.jar
+  ```
+  - API Spec은 [Swagger](http://localhost:8080/api-docs)를 통해 확인 가능합니다.
 
 ## Technologies
 - 필수 요구 사항
@@ -31,6 +62,8 @@
     - 테스트케이스에서 Redis 실행을 위해 사용
   - ArchUnit
     - 패키지 및 모듈 접근 제한을 위해 사용
+  - Resilience4j
+    - 블로그 검색 장애 대응을 위한 circuit breaker
 
 ## Code Convention
 - 기본적으로 [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html) 를 준수합니다.
@@ -92,7 +125,7 @@
   - infra : http, object storage 기타 등 인프라 전반 통신에 필요한 클래스들이 있습니다.
 
 ## Package Convention
-- 해당 프로젝트는 좋은(?) Application 구조와 유지보수성을 위해 package(또는 Layer)간의 무분별한 참조를 지양하고 있습니다.
+- 해당 프로젝트는 좋은 Application 구조와 유지보수성을 위해 package(또는 Layer)간의 무분별한 참조를 지양하고 있습니다.
 - layer
   - domain -> infra 접근 금지
   - domain -> common 접근 금지
@@ -121,7 +154,7 @@ contents
 | Commit Type | Description                        |
 |-------------|------------------------------------|
 | feat        | 새로운 기능 추가                          | 
-| refactor    | 일반적으로 코드를 수정하는 경우 또는 리팩터링 하는 경우    | 
+| refactoring | 일반적으로 코드를 수정하는 경우 또는 리팩터링 하는 경우    | 
 | fix         | 버그 및 오류 수정                         | 
 | test        | 테스트 코드를 수정 또는 리팩터링 하는 경우           | 
 | style       | 코드(로직)의 변경없이 코드 포맷, 컨밴션 등을 수정하는 경우 |
@@ -135,23 +168,10 @@ contents
 ## Git Branch Strategy
 - N/A
 
-## Installation and Run
-- TBD
-
-## Application Profile
-- test
-  - 테스트 코드가 실행되는 profile입니다.
-  - 테스트 코드에서 의존 구성요소를(e.g. 외부 통신, 다른 서비스 등) 사용할 수 없을 때는 **테스트 더블**을 사용하여 테스트합니다.
-- local
-  - 로컬 환경에서 실행되는 profile입니다.
-  - 의존 구성요소는 docker-compose를 통해 실행합니다.
-  - docker-compose로 해결 할 수 없는 경우 Profile별로 별도 로직을 수행할 수 있도록 합니다.
-- 과제 프로젝트이므로 test, local Profile 외에는 지원하지 않습니다.
-
 ## CI/CD Principle
 - N/A
 
-## 프로젝트 진행하면서 부가 설명
+## 프로젝트 신경 썼던점
 - TBD
 
 ## 향후 과제
