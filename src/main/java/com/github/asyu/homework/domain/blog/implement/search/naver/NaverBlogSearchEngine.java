@@ -8,6 +8,8 @@ import com.github.asyu.homework.domain.blog.enums.BlogType;
 import com.github.asyu.homework.domain.blog.implement.maper.BlogMapper;
 import com.github.asyu.homework.domain.blog.implement.search.IBlogSearchEngine;
 import com.github.asyu.homework.infra.http.RetrofitSpecFactory;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,8 @@ public class NaverBlogSearchEngine implements IBlogSearchEngine {
     this.secret = secret;
   }
 
+  @CircuitBreaker(name = "naver", fallbackMethod = "defaultFallback")
+  @Retry(name = "naver")
   @Override
   public BlogResponse search(BlogSearchCondition condition) {
     try {
@@ -62,4 +66,8 @@ public class NaverBlogSearchEngine implements IBlogSearchEngine {
     }
   }
 
+  private BlogResponse defaultFallback(BlogSearchCondition condition, Throwable t) {
+    // TODO Exception이 발생하는게 아니라 Cache같은게 있어서 BlogResponse를 Return 할 수 있으면 좋을거같은데...
+    throw new CommunicationFailureException("All Search Engine communication failure. query : " + condition.getQuery(), t);
+  }
 }

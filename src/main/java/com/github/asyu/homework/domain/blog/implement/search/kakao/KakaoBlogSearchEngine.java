@@ -8,6 +8,8 @@ import com.github.asyu.homework.domain.blog.enums.BlogType;
 import com.github.asyu.homework.domain.blog.implement.maper.BlogMapper;
 import com.github.asyu.homework.domain.blog.implement.search.IBlogSearchEngine;
 import com.github.asyu.homework.infra.http.RetrofitSpecFactory;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,8 @@ import retrofit2.Response;
 @Component
 public class KakaoBlogSearchEngine implements IBlogSearchEngine {
 
+  private static final String KAKAO = "kakao";
+
   private final String apiKey;
 
   private final KakaoApiSpec apiSpec;
@@ -31,6 +35,8 @@ public class KakaoBlogSearchEngine implements IBlogSearchEngine {
     this.apiKey = "KakaoAK " + apiKey;
   }
 
+  @CircuitBreaker(name = KAKAO)
+  @Retry(name = KAKAO)
   @Override
   public BlogResponse search(BlogSearchCondition condition) {
     try {
